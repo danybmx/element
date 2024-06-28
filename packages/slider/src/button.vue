@@ -112,6 +112,14 @@
       }
     },
 
+    beforeDestroy() {
+      window.removeEventListener('mousemove', this.onDragging);
+      window.removeEventListener('touchmove', this.onDragging);
+      window.removeEventListener('mouseup', this.onDragEnd);
+      window.removeEventListener('touchend', this.onDragEnd);
+      window.removeEventListener('contextmenu', this.onDragEnd);
+    },
+
     methods: {
       displayTooltip() {
         this.$refs.tooltip && (this.$refs.tooltip.showPopper = true);

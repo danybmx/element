@@ -117,8 +117,15 @@
       };
     },
 
+    beforeDestroy() {
+      if (this.$el) {
+        this.$el.removeEventListener('scroll', this.updatePopper);        
+      }
+    },
+
     watch: {
       visible(val) {
+        console.log('component visible changed', val);
         if (val) {
           this.closed = false;
           this.$emit('open');

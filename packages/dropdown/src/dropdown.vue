@@ -203,6 +203,12 @@
           this.triggerElm.setAttribute('class', (this.triggerElm.getAttribute('class') || '') + ' el-dropdown-selfdefine'); // 控制
         }
       },
+      handleFocus() {
+        this.focusing = true;
+      },
+      handleBlur() {
+        this.focusing = false;
+      },
       initEvent() {
         let { trigger, show, hide, handleClick, splitButton, handleTriggerKeyDown, handleItemKeyDown } = this;
         this.triggerElm = splitButton
@@ -215,15 +221,9 @@
         dropdownElm.addEventListener('keydown', handleItemKeyDown, true); // item keydown
         // 控制自定义元素的样式
         if (!splitButton) {
-          this.triggerElm.addEventListener('focus', () => {
-            this.focusing = true;
-          });
-          this.triggerElm.addEventListener('blur', () => {
-            this.focusing = false;
-          });
-          this.triggerElm.addEventListener('click', () => {
-            this.focusing = false;
-          });
+          this.triggerElm.addEventListener('focus', this.handleFocus);
+          this.triggerElm.addEventListener('blur', this.handleBlur);
+          this.triggerElm.addEventListener('click', this.handleBlur);
         }
         if (trigger === 'hover') {
           this.triggerElm.addEventListener('mouseenter', show);
@@ -288,6 +288,22 @@
           {menuElm}
         </div>
       );
+    },
+    beforeDestroy() {
+      console.log('beforeDestroy on dropdown');
+      if (this.triggerElm) {
+        this.triggerElm.removeEventListener('keydown', this.handleTriggerKeyDown);
+        this.triggerElm.removeEventListener('focus', this.handleFocus);
+        this.triggerElm.removeEventListener('blur', this.handleBlur);
+        this.triggerElm.removeEventListener('click', this.handleBlur);
+        this.triggerElm.removeEventListener('mouseenter', this.show);
+        this.triggerElm.removeEventListener('mouseleave', this.hide);
+      }
+      if (this.dropdownElm) {
+        this.dropdownElm.removeEventListener('keydown', this.handleItemKeyDown, true);
+        this.dropdownElm.removeEventListener('mouseenter', this.show);
+        this.dropdownElm.removeEventListener('mouseleave', this.hide);
+      }
     }
   };
 </script>

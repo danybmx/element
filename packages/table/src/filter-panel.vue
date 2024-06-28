@@ -167,12 +167,16 @@
       }
     },
 
+    beforeDestroy() {
+      if (this.table.bodyWrapper) {
+        this.table.bodyWrapper.removeEventListener('scroll', this.updatePopper);
+      }
+    },
+
     mounted() {
       this.popperElm = this.$el;
       this.referenceElm = this.cell;
-      this.table.bodyWrapper.addEventListener('scroll', () => {
-        this.updatePopper();
-      });
+      this.table.bodyWrapper.addEventListener('scroll', this.updatePopper);
 
       this.$watch('showPopper', (value) => {
         if (this.column) this.column.filterOpened = value;
