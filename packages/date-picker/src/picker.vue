@@ -917,7 +917,6 @@ export default {
     },
 
     unmountPicker() {
-      console.log('unmounting picker');
       if (this.picker) {
         this.picker.$destroy();
         this.picker.$off();
