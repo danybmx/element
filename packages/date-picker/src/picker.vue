@@ -610,6 +610,10 @@ export default {
     this.$on('fieldReset', this.handleFieldReset);
   },
 
+  beforeDestroy() {
+    this.unmountPicker();
+  },
+
   methods: {
     focus() {
       if (!this.ranged) {
@@ -913,13 +917,16 @@ export default {
     },
 
     unmountPicker() {
+      console.log('unmounting picker');
       if (this.picker) {
         this.picker.$destroy();
         this.picker.$off();
         if (typeof this.unwatchPickerOptions === 'function') {
           this.unwatchPickerOptions();
         }
-        this.picker.$el.parentNode.removeChild(this.picker.$el);
+        if (this.picker.$el.parentNode) {
+          this.picker.$el.parentNode.removeChild(this.picker.$el);
+        }
       }
     },
 
